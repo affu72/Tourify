@@ -1,19 +1,32 @@
 import express from 'express';
+import morgan from 'morgan';
+
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
 const app = express();
-app.use(express.json());
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+//1) MIDDLEWARES
+app.use(morgan('dev'));
+app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log("Middleware");
+  next();
+})
+
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
+//2) ROUTE HANDLERS
 function getAllTours(req, res) {
+  console.log("get all tours",req.body);
   res.status(200).json({
     status: 'success',
     results: tours.length,
@@ -89,6 +102,8 @@ function deleteTourById(req, res) {
   });
 }
 
+//3) ROUTES 
+
 // app.get('/api/v1/tours', getAllTours);
 // app.post('/api/v1/tours', createTour);
 // app.get('/api/v1/tours/:id', getTourById);
@@ -99,12 +114,14 @@ app
   .route('/api/v1/tours')
   .get(getAllTours)
   .post(createTour);
-  
+
 app
   .route('/api/v1/tours/:id')
   .get(getTourById)
   .patch(updateTourById)
   .delete(deleteTourById);
+
+//4) START SERVER
 
 const port = 3000;
 app.listen(port, () => console.log(`App is running on port ${port}`));
