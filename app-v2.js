@@ -15,9 +15,10 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 app.use((req, res, next) => {
-  console.log('Middleware');
+  console.log("Middleware");
   next();
-});
+})
+
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
@@ -25,7 +26,7 @@ const tours = JSON.parse(
 
 //2) ROUTE HANDLERS
 function getAllTours(req, res) {
-  console.log('get all tours', req.body);
+  console.log("get all tours",req.body);
   res.status(200).json({
     status: 'success',
     results: tours.length,
@@ -101,7 +102,7 @@ function deleteTourById(req, res) {
   });
 }
 
-//3) ROUTES
+//3) ROUTES 
 
 // app.get('/api/v1/tours', getAllTours);
 // app.post('/api/v1/tours', createTour);
@@ -109,7 +110,10 @@ function deleteTourById(req, res) {
 // app.patch('/api/v1/tours/:id', updateTourById);
 // app.delete('/api/v1/tours/:id', deleteTourById);
 
-app.route('/api/v1/tours').get(getAllTours).post(createTour);
+app
+  .route('/api/v1/tours')
+  .get(getAllTours)
+  .post(createTour);
 
 app
   .route('/api/v1/tours/:id')
