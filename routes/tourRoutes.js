@@ -1,17 +1,15 @@
 import express from 'express'
+import { checkID,checkBody } from '../controller/tourController.js';
 import { getAllTours,getTourById,createTour,deleteTourById,updateTourById } from '../controller/tourController.js';
 
 const router = express.Router();
 
-router.param('id', (req, res, next, val) => {
-  console.log(val);
-  next()
-})
+router.param('id', checkID);
 
 router
   .route('/')
   .get(getAllTours)
-  .post(createTour);
+  .post(checkBody,createTour);
 
 router
   .route('/:id')
