@@ -15,7 +15,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 app.use((req, res, next) => {
-  console.log("Middleware");
+  // console.log("Middleware");
   next();
 })
 
